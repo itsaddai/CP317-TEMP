@@ -1,7 +1,5 @@
 package gradeGUI;
 
-import java.awt.BorderLayout;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -22,7 +19,6 @@ import javax.swing.JPanel;
 public class se_interface implements ActionListener {
 	
 	JTextField output;
-	
     JFrame window;
     JPanel panel1;
     JPanel panel2;
@@ -35,9 +31,7 @@ public class se_interface implements ActionListener {
     JPanel panel3;
     JPanel filePanel;
     JPanel submitPanel;
-    
-    
-    Holder ph = new Holder();
+    Holder h = Holder.getHolder();
 
     public se_interface() {
         window = new JFrame();// CREATE THE WINDOW
@@ -130,7 +124,7 @@ public class se_interface implements ActionListener {
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     System.out.println("Course file selected: " + selectedFile.getAbsolutePath());
-                    ph.setCourseFile(selectedFile.getAbsolutePath());
+                    h.setCourseFile(selectedFile.getAbsolutePath());
                 }
             } else if (clickedButton.getText().equals("Open Name File")) {
                 JFileChooser fileChooser = new JFileChooser();
@@ -138,7 +132,7 @@ public class se_interface implements ActionListener {
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     System.out.println("Name file selected: " + selectedFile.getAbsolutePath());
-                    ph.setNameFile(selectedFile.getAbsolutePath());
+                    h.setNameFile(selectedFile.getAbsolutePath());
                 }
             } else if (clickedButton.getText().equals("Choose Output Folder")) {
                 JFileChooser folderChooser = new JFileChooser();
@@ -147,16 +141,21 @@ public class se_interface implements ActionListener {
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFolder = folderChooser.getSelectedFile();
                     System.out.println("Output folder selected: " + selectedFolder.getAbsolutePath());
-                    ph.setOutputFolderPath(selectedFolder.getAbsolutePath());
+                    h.setOutputFolderPath(selectedFolder.getAbsolutePath());
                 }
             } else if (clickedButton.getText().equals("Submit")) {
                 System.out.println("Submit button clicked");
-                ph.setOutputFileName(output.getText());
-                System.out.println("Course File: " + ph.getCourseFileLoc());
-                System.out.println("Name File: " + ph.getNameFileLoc());
-                System.out.println("Output Folder: " +  ph.getOutputFolderPath());
-                System.out.println("Output File: " +  ph.getOutputFileName());
+                h.setOutputFileName(output.getText());
+                System.out.println("Course File: " + h.getCourseFileLoc());
+                System.out.println("Name File: " + h.getNameFileLoc());
+                System.out.println("Output Folder: " +  h.getOutputFolderPath());
+                System.out.println("Output File: " +  h.getOutputFileName());
+                System.out.println("Preparing Files...");
                 
+                //Make the output
+                h.generateOutput();
+                
+                System.out.println("Output created!");
             }
         }
     }
