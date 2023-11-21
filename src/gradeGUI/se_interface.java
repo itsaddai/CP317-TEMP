@@ -18,20 +18,20 @@ import javax.swing.JPanel;
 
 public class se_interface implements ActionListener {
 	
-	JTextField output;
-    JFrame window;
-    JPanel panel1;
-    JPanel panel2;
-    JPanel panelF;
-    JPanel panelOut;
-    JLabel file_1;
-    JLabel file_2;
-    JLabel folder_1;
-    JLabel out_1;
-    JPanel panel3;
-    JPanel filePanel;
-    JPanel submitPanel;
-    Holder h = Holder.getHolder();
+	private JTextField output;
+	private JFrame window;
+	private JPanel panel1;
+	private JPanel panel2;
+	private JPanel panelF;
+	private JPanel panelOut;
+	private JLabel file_1;
+	private JLabel file_2;
+	private JLabel folder_1;
+	private JLabel out_1;
+	private JPanel panel3;
+	private JPanel filePanel;
+	private JPanel submitPanel;
+	private Holder h = Holder.getHolder();
 
     public se_interface() {
         window = new JFrame();// CREATE THE WINDOW
@@ -54,7 +54,7 @@ public class se_interface implements ActionListener {
         close.setPreferredSize(new Dimension(150, 25));
         close.addActionListener(this);
         
-        output = new JTextField("Output", 40);
+        output = new JTextField("Output.txt", 40);
         output.setPreferredSize(new Dimension(100, 25));
 
         JButton submit = new JButton("Submit");

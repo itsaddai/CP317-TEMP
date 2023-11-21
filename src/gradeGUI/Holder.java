@@ -1,5 +1,6 @@
 package gradeGUI;
 
+import java.nio.file.Paths;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.HashMap;
@@ -17,69 +18,52 @@ public class Holder {
 	private String outputFileName;
 
 	private Holder() {
-		nameFileLoc = "";
-		courseFileLoc = "";
-		outputFolderPath = "";
-		outputFileName = "";
+		nameFileLoc = Paths.get("").toAbsolutePath().toString()+"\\nameFile.txt";
+		courseFileLoc = Paths.get("").toAbsolutePath().toString()+"\\courseFile.txt";
+		outputFolderPath = Paths.get("").toAbsolutePath().toString();
+		outputFileName = "Output.txt";
 	}
 	public static Holder getHolder() {
 		return h;
 	}
-	void setNameFile(String path) {
+	public void setNameFile(String path) {
 		nameFileLoc = path;
 	}
-	void setCourseFile(String path) {
+	public void setCourseFile(String path) {
 		courseFileLoc = path;
 	}
-	void setOutputFolderPath(String path) {
+	public void setOutputFolderPath(String path) {
 		outputFolderPath = path;
 	}
-	void setOutputFileName(String name) {
+	public void setOutputFileName(String name) {
 		outputFileName = name;
 	}
-	String getNameFileLoc() {
+	public String getNameFileLoc() {
 		return nameFileLoc;
 	}
-	String getCourseFileLoc() {
+	public String getCourseFileLoc() {
 		return courseFileLoc;
 	}
-	String getOutputFolderPath() {
+	public String getOutputFolderPath() {
 		return outputFolderPath;
 	}
-	String getOutputFileName() {
+	public String getOutputFileName() {
 		return outputFileName;
 	}
-	/*
-	void clearCourse() {
-		courses.clear();
-	}
-	void clearName() { 
-		names.clear();
-	}
-	void addCourse(String key, String val) {
-		// key is a combination of Student ID and Course Code, comma-separated
-		// val is all other columns, comma-separated
-		courses.put(key, val);
-	}
-	void addName(String key, String val) {
-		// key is Student ID
-		// val is Student Name 
-		names.put(key, val);
-	}
-	HashMap<String, String> getCourse() {
-		return courses;
-	}
-	HashMap<String, String> getName() {
-		return names;
-	}
-	*/
-	void generateOutput() {
+	
+	public void generateOutput() {
 		//Output is Student ID, Student Name, Course Code, and Final Grade
-		//TODO: Put output into output string
 		HashMap<String, String> names = new HashMap<String, String>();
 		ArrayList<String> output = new ArrayList<String>();
 		
 		try {
+			File outFile = new File(getOutputFolderPath(), getOutputFileName());
+			if (outFile.createNewFile()) {
+			    System.out.println("File created:" + outFile.getName() + " @ " + outFile.getAbsolutePath());
+		    } else {
+			    System.out.println("File already exists.");
+			    return;
+		    }
 			File nameObj = new File(getNameFileLoc());
 			Scanner nameReader = new Scanner(nameObj);
 			while (nameReader.hasNextLine()) {
@@ -97,21 +81,14 @@ public class Holder {
 	        	outLine += (String) courseCols[0] + ", ";
 	        	outLine += (String) names.get(courseCols[0]) + ", ";
 	        	outLine += (String) courseCols[1] + ", ";
-	        	outLine += ""+(Math.round(((0.2*Float.parseFloat(courseCols[2]))+
+	        	outLine += ""+((float) Math.round((float) ((0.2*Float.parseFloat(courseCols[2]))+
 	        			(0.2*Float.parseFloat(courseCols[3]))+
 	        			(0.2*Float.parseFloat(courseCols[4]))+
-	        			(0.4*Float.parseFloat(courseCols[5])))*10) / 10);
+	        			(0.4*Float.parseFloat(courseCols[5])))*10))/10.0;
 	        	output.add(outLine);
 			}
 			courseReader.close();
 			
-			File outFile = new File(getOutputFolderPath(), getOutputFileName());
-			if (outFile.createNewFile()) {
-			    System.out.println("File created:" + outFile.getName() + " @ " + outFile.getAbsolutePath());
-		    } else {
-			    System.out.println("File already exists.");
-			    return;
-		    }
 			FileWriter myWriter = new FileWriter(outFile);
 		    for (String i: output) {
 		    	myWriter.write(i+"\r\n");
