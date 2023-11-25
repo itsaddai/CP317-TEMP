@@ -18,8 +18,8 @@ public class Holder {
 	private String outputFileName;
 
 	private Holder() {
-		nameFileLoc = Paths.get("").toAbsolutePath().toString()+"\\nameFile.txt";
-		courseFileLoc = Paths.get("").toAbsolutePath().toString()+"\\courseFile.txt";
+		nameFileLoc = Paths.get("").toAbsolutePath().toString()+"\\NameFile.txt";
+		courseFileLoc = Paths.get("").toAbsolutePath().toString()+"\\CourseFile.txt";
 		outputFolderPath = Paths.get("").toAbsolutePath().toString();
 		outputFileName = "Output.txt";
 	}

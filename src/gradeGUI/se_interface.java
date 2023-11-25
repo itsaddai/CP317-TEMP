@@ -27,6 +27,9 @@ public class se_interface implements ActionListener {
 	private JLabel file_1;
 	private JLabel file_2;
 	private JLabel folder_1;
+	private JLabel chosen_1;
+	private JLabel chosen_2;
+	private JLabel chosen_3;
 	private JLabel out_1;
 	private JPanel panel3;
 	private JPanel filePanel;
@@ -54,6 +57,10 @@ public class se_interface implements ActionListener {
         close.setPreferredSize(new Dimension(150, 25));
         close.addActionListener(this);
         
+        chosen_1 = new JLabel("File: " + h.getCourseFileLoc());
+        chosen_2 = new JLabel("File: " + h.getNameFileLoc());
+        chosen_3 = new JLabel("Folder: " + h.getOutputFolderPath());
+        
         output = new JTextField("Output.txt", 40);
         output.setPreferredSize(new Dimension(100, 25));
 
@@ -67,16 +74,19 @@ public class se_interface implements ActionListener {
         panel1.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel1.add(file_1);
         panel1.add(open);
+        panel1.add(chosen_1);
 
         panel2 = new JPanel();
         panel2.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel2.add(file_2);
         panel2.add(open2);
+        panel2.add(chosen_2);
         
         panelF = new JPanel();
         panelF.setLayout(new FlowLayout(FlowLayout.CENTER));
         panelF.add(folder_1);
         panelF.add(close);
+        panelF.add(chosen_3);
 
         filePanel.add(panel1);
         filePanel.add(panel2);
@@ -125,6 +135,7 @@ public class se_interface implements ActionListener {
                     File selectedFile = fileChooser.getSelectedFile();
                     System.out.println("Course file selected: " + selectedFile.getAbsolutePath());
                     h.setCourseFile(selectedFile.getAbsolutePath());
+                    chosen_1.setText(h.getCourseFileLoc());
                 }
             } else if (clickedButton.getText().equals("Open Name File")) {
                 JFileChooser fileChooser = new JFileChooser();
@@ -133,6 +144,7 @@ public class se_interface implements ActionListener {
                     File selectedFile = fileChooser.getSelectedFile();
                     System.out.println("Name file selected: " + selectedFile.getAbsolutePath());
                     h.setNameFile(selectedFile.getAbsolutePath());
+                    chosen_2.setText(h.getNameFileLoc());
                 }
             } else if (clickedButton.getText().equals("Choose Output Folder")) {
                 JFileChooser folderChooser = new JFileChooser();
@@ -142,6 +154,7 @@ public class se_interface implements ActionListener {
                     File selectedFolder = folderChooser.getSelectedFile();
                     System.out.println("Output folder selected: " + selectedFolder.getAbsolutePath());
                     h.setOutputFolderPath(selectedFolder.getAbsolutePath());
+                    chosen_3.setText(h.getOutputFolderPath());
                 }
             } else if (clickedButton.getText().equals("Submit")) {
                 System.out.println("Submit button clicked");
