@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 //Employs Singleton Pattern
@@ -16,12 +19,15 @@ public class Holder {
 	private String courseFileLoc;
 	private String outputFolderPath;
 	private String outputFileName;
+	private String messageStr;
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	private Holder() {
 		nameFileLoc = Paths.get("").toAbsolutePath().toString()+"\\NameFile.txt";
 		courseFileLoc = Paths.get("").toAbsolutePath().toString()+"\\CourseFile.txt";
 		outputFolderPath = Paths.get("").toAbsolutePath().toString();
 		outputFileName = "Output.txt";
+		messageStr = "";
 	}
 	public static Holder getHolder() {
 		return h;
@@ -38,6 +44,17 @@ public class Holder {
 	public void setOutputFileName(String name) {
 		outputFileName = name;
 	}
+	public void addMessage(String message) {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		messageStr = messageStr + "\r\n@ " + dateFormat.format(timestamp) + ": " + message;
+	}
+	public void addError(String message) {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		messageStr = messageStr + "\r\nERROR @ " + dateFormat.format(timestamp) + ": " + message;
+	}
+	public void clearMessageStr() {
+		messageStr = "";
+	}
 	public String getNameFileLoc() {
 		return nameFileLoc;
 	}
@@ -50,18 +67,22 @@ public class Holder {
 	public String getOutputFileName() {
 		return outputFileName;
 	}
-	
+	public String getMessageStr() {
+		return messageStr;
+	}
 	public void generateOutput() {
 		//Output is Student ID, Student Name, Course Code, and Final Grade
 		HashMap<String, String> names = new HashMap<String, String>();
 		ArrayList<String> output = new ArrayList<String>();
-		
+		clearMessageStr();
 		try {
 			File outFile = new File(getOutputFolderPath(), getOutputFileName());
 			if (outFile.createNewFile()) {
-			    System.out.println("File created:" + outFile.getName() + " @ " + outFile.getAbsolutePath());
+			    System.out.println("File created: " + outFile.getAbsolutePath());
+			    addMessage("File created: " + outFile.getAbsolutePath());
 		    } else {
 			    System.out.println("File already exists.");
+			    addError("File already exists.");
 			    return;
 		    }
 			File nameObj = new File(getNameFileLoc());
@@ -96,7 +117,8 @@ public class Holder {
 		    myWriter.close();
 			
 	    } catch (IOException e) {
-	    	System.out.println("Error occurred while reading files");
+	    	System.out.println("Problem occurred while reading files");
+	    	addError("Problem occurred while reading files");
 	    }
 	}
 }

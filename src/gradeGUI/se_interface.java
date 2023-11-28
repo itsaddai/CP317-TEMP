@@ -31,7 +31,9 @@ public class se_interface implements ActionListener {
 	private JLabel chosen_2;
 	private JLabel chosen_3;
 	private JLabel out_1;
+	private JLabel messages;
 	private JPanel panel3;
+	private JPanel panelM;
 	private JPanel filePanel;
 	private JPanel submitPanel;
 	private Holder h = Holder.getHolder();
@@ -60,6 +62,7 @@ public class se_interface implements ActionListener {
         chosen_1 = new JLabel("File: " + h.getCourseFileLoc());
         chosen_2 = new JLabel("File: " + h.getNameFileLoc());
         chosen_3 = new JLabel("Folder: " + h.getOutputFolderPath());
+        messages = new JLabel(h.getMessageStr());
         
         output = new JTextField("Output.txt", 40);
         output.setPreferredSize(new Dimension(100, 25));
@@ -92,7 +95,7 @@ public class se_interface implements ActionListener {
         filePanel.add(panel2);
         filePanel.add(panelF);
 
-        submitPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        submitPanel = new JPanel(new GridLayout(3, 1, 10, 10));
         
         panelOut = new JPanel();
         panelOut.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -102,9 +105,14 @@ public class se_interface implements ActionListener {
         panel3 = new JPanel();
         panel3.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel3.add(submit);
+        
+        panelM = new JPanel();
+        panelM.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelM.add(messages);
 
         submitPanel.add(panelOut);
         submitPanel.add(panel3);
+        submitPanel.add(panelM);
         
         window.add(filePanel);
         window.add(submitPanel);
@@ -167,8 +175,8 @@ public class se_interface implements ActionListener {
                 
                 //Make the output
                 h.generateOutput();
-                
-                System.out.println("Output created!");
+                System.out.println("DONE!");
+                messages.setText(h.getMessageStr());
             }
         }
     }
