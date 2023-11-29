@@ -45,7 +45,7 @@ public class se_interface implements ActionListener {
         file_1 = new JLabel("Course File:");
         file_2 = new JLabel("Name File:");
         folder_1 = new JLabel("Folder:");
-        out_1 = new JLabel("Output:");
+        out_1 = new JLabel("Output (.txt):");
 
         JButton open = new JButton("Open Course File");
         open.setPreferredSize(new Dimension(150, 25));
@@ -64,7 +64,7 @@ public class se_interface implements ActionListener {
         chosen_3 = new JLabel("Folder: " + h.getOutputFolderPath());
         messages = new JLabel(h.getMessageStr());
         
-        output = new JTextField("Output.txt", 40);
+        output = new JTextField("Output", 40);
         output.setPreferredSize(new Dimension(100, 25));
 
         JButton submit = new JButton("Submit");
