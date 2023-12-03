@@ -1,15 +1,14 @@
 package gradeGUI;
 
-import java.nio.file.Paths;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
 
 
 //Employs Singleton Pattern
@@ -92,10 +91,14 @@ public class Holder {
 				String line = courseReader.nextLine();
 	        	String[] courseCols = line.split(", ");
 	        	//TODO: Fix this so it throws exception when there are more than 6 columns in CourseFile.txt
-	        	if (courseCols.length != 6) {
+	        	if (courseCols.length > 6) {
 	        		courseReader.close();
-	        		throw new Exception("Six columns not found on line " + Integer.toString(courseLine));
+	        		throw new Exception("More than 6 columns detected on line " + Integer.toString(courseLine));
 	        	}
+				if(courseCols.length < 6){
+					courseReader.close();
+	        		throw new Exception("less than 6 columns detected on line " + Integer.toString(courseLine));
+				}
 	        	String outLine = ""; 
 	        	outLine += (String) courseCols[0] + ", ";
 	        	outLine += (String) names.get(courseCols[0]) + ", ";
