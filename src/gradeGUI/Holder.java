@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 
 //Employs Singleton Pattern
@@ -22,8 +23,8 @@ public class Holder {
 	private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	private Holder() {
-		nameFileLoc = Paths.get("").toAbsolutePath().toString()+"\\NameFile.txt";
-		courseFileLoc = Paths.get("").toAbsolutePath().toString()+"\\CourseFile.txt";
+		nameFileLoc = "";
+		courseFileLoc = "";
 		outputFolderPath = Paths.get("").toAbsolutePath().toString();
 		outputFileName = "Output.txt";
 		messageStr = "";
@@ -71,15 +72,34 @@ public class Holder {
 	}
 	public void generateOutput() {
 		//Output is Student ID, Student Name, Course Code, and Final Grade
-		HashMap<String, String> names = new HashMap<String, String>();
-		ArrayList<String> output = new ArrayList<String>();
-		clearMessageStr();
 		try {
+			clearMessageStr();
+			if (getCourseFileLoc().length() == 0) {
+				throw new Exception("Please Select Course File");
+			} if (getNameFileLoc().length() == 0) {
+				throw new Exception("Please Select Name File");
+			}
+			HashMap<String, String> names = new HashMap<String, String>();
+			ArrayList<String> output = new ArrayList<String>();
 			File nameObj = new File(getNameFileLoc());
 			Scanner nameReader = new Scanner(nameObj);
+			int nameLine = 0;
 			while (nameReader.hasNextLine()) {
+				nameLine++;
 				String line = nameReader.nextLine();
 	        	String[] nameCols = line.split(", ");
+	        	if (nameCols.length > 2) {
+	        		nameReader.close();
+	        		throw new Exception("More than 2 columns detected on line " + Integer.toString(nameLine) + " of the name file");
+	        	} if(nameCols.length < 2){
+					nameReader.close();
+	        		throw new Exception("Less than 2 columns detected on line " + Integer.toString(nameLine) + " of the name file");
+				}
+	        	Pattern SIDPattern = Pattern.compile("^\\d{9}$");
+	        	if (!SIDPattern.matcher(nameCols[0]).matches()) {
+	        		nameReader.close();
+	        		throw new Exception("Invalid Student ID on line " + Integer.toString(nameLine) + " of the name file, 9 digits required");
+	        	}
 	        	names.put(nameCols[0], nameCols[1]);
 			}
 			nameReader.close();
@@ -90,14 +110,23 @@ public class Holder {
 				courseLine++;
 				String line = courseReader.nextLine();
 	        	String[] courseCols = line.split(", ");
-	        	//TODO: Fix this so it throws exception when there are more than 6 columns in CourseFile.txt
+	        	Pattern SIDPattern = Pattern.compile("^\\d{9}$");
+	        	if (!SIDPattern.matcher(courseCols[0]).matches()) {
+	        		courseReader.close();
+	        		throw new Exception("Invalid Student ID on line " + Integer.toString(courseLine) + " of the course file, 9 digits required");
+	        	}
+	        	Pattern CCPattern = Pattern.compile("^[A-Z]{2}\\d{3}$");
+	        	if (!CCPattern.matcher(courseCols[1]).matches()) {
+	        		courseReader.close();
+	        		throw new Exception("Invalid Course Code on line " + Integer.toString(courseLine) + " of the course file, requires 2 uppercase letters then 3 digits");
+	        	}
 	        	if (courseCols.length > 6) {
 	        		courseReader.close();
-	        		throw new Exception("More than 6 columns detected on line " + Integer.toString(courseLine));
+	        		throw new Exception("More than 6 columns detected on line " + Integer.toString(courseLine) + " of the course file");
 	        	}
 				if(courseCols.length < 6){
 					courseReader.close();
-	        		throw new Exception("less than 6 columns detected on line " + Integer.toString(courseLine));
+	        		throw new Exception("Less than 6 columns detected on line " + Integer.toString(courseLine) + " of the course file");
 				}
 	        	String outLine = ""; 
 	        	outLine += (String) courseCols[0] + ", ";
@@ -108,7 +137,7 @@ public class Holder {
 	        			(Float.parseFloat(courseCols[4]) < 0.0 || Float.parseFloat(courseCols[4]) > 100.0) ||
 	        			(Float.parseFloat(courseCols[5]) < 0.0 || Float.parseFloat(courseCols[5]) > 100.0)) {
 	        		courseReader.close();
-	        		throw new Exception("Grade out of bounds");
+	        		throw new Exception("Invalid grade on line " + Integer.toString(courseLine) + " of the course file");
 	        	}
 	        	outLine += ""+((float) Math.round((float) ((0.2*Float.parseFloat(courseCols[2]))+
 	        			(0.2*Float.parseFloat(courseCols[3]))+
@@ -134,9 +163,6 @@ public class Holder {
 		    }
 		    myWriter.close();
 			
-	    } catch (IOException e) {
-	    	System.out.println(e);
-	    	addError(e.getMessage());
 	    } catch (NumberFormatException e) {
 	    	System.out.println(e);
 	    	addError("Non-numerical value found with " + e.getMessage());
